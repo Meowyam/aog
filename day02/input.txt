@@ -1,0 +1,7 @@
+the number of original shares is 1000
+
+the number of new shares is two hundred
+
+the number of Class A shares shall be given by the sum of the number of original shares and the number of new shares
+
+the number of Class B shares shall be given by the sum of the original shares and the number of new shares
