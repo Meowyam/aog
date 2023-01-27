@@ -21,10 +21,14 @@ def parseAndValidate(tree):
 
 def getWhich(tree,eng):
   constructor,args = tree.unpack()
-  if constructor=="NumberedKind":
+  if (constructor=="NumberedKind"):
     shares = args[1]
-    getName(shares,eng)
-    return(getName(shares,eng))
+    return((getName(shares,eng)))
+  elif (constructor=="UnnumberedKind"):
+    print("getWhich")
+    var1 = args[0]
+    name = getName(var1,eng)
+    return((name))
   else:
     pass
 
@@ -35,18 +39,23 @@ def getSum(tree,eng):
   result = add(args[1],args[2],eng)
   return(result)
 
-
 def add(tree1,tree2,eng):
+  print("add")
+  print(tree1)
+  print(getWhich(tree1,eng))
   ls = ([getWhich(tree1,eng),getWhich(tree2,eng)])
   vals = [numberShares[x] for x in ls]
   return (sum(vals))
 
 def getName(tree,eng):
   constructor,args = tree.unpack()
+  print("getname",constructor)
   mod,ignore = args[0].unpack()
-  # print(eng.linearize(args[0]))
-  # print(mod)
-  return(eng.linearize(args[0]))
+  theOrNo = eng.linearize(args[0])
+  if len(theOrNo) == 1:
+    return(theOrNo)
+  else:
+    return(theOrNo[-1])
 
 def getNumber(tree,eng):
   constructor,args = tree.unpack()

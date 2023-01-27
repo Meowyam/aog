@@ -5,6 +5,7 @@ abstract Shares = {
     Comment;
     Item;
     Kind;
+    What;
     Quality;
     Number;
     Equals;
@@ -14,15 +15,28 @@ abstract Shares = {
   fun
     Pred : Item -> Number -> Comment;
     SumPred : Equals -> Item -> SumItem -> Comment;
-    NumberedKind : Kind -> Item;
+
+    NumberedKind : What -> Kind -> Item;
     UnnumberedKind : Kind -> Item;
-    -- Shares: Kind;
+    -- UnSharedKind : Kind -> Item;
+    Shares: Kind -> Kind;
+
     Mod : Quality -> Kind;
+
     Old,New : Quality;
+    WithThe : Quality -> Quality;
     Class : String -> Quality ;
+
     SumOf : Sum -> Item -> Item -> SumItem;
+    Comma: Item -> SumItem -> SumItem;
+
     Thousand, Hundred : Number;
     IsSum, Given: Equals;
     And: Sum;
-    Comma: Item -> SumItem -> SumItem;
+    Numberof : What;
+
 }
+
+--
+
+---   the number of Class L shares is the sum of the number of Class K, Class G, and Class H shares

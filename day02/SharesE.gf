@@ -7,6 +7,8 @@ concrete SharesE of Shares = open Prelude in {
     Quality = LinQuality;
     Equals = LinEquals;
     Sum = SS;
+    What = SS;
+    SumItem = SS;
   lin
     Pred item num = {
       s = item.s ++ "is" ++ num.s;
@@ -17,11 +19,17 @@ concrete SharesE of Shares = open Prelude in {
     Mod q = {
       s = q.s;
     };
-    NumberedKind k = {
-      s = "the number of" ++ k.s ++ "shares";
+    NumberedKind w k = {
+      s = w.s ++ k.s;
     };
     UnnumberedKind k = {
-      s = k.s ++ "shares";
+      s = k.s;
+    };
+    -- UnSharedKind k = {
+    --   s = k.s;
+    -- };
+    Shares t = {
+      s = t.s ++ "shares";
     };
     SumOf sum a b = {
       s = a.s ++ sum.s ++ b.s;
@@ -38,6 +46,8 @@ concrete SharesE of Shares = open Prelude in {
     Given = mkEquals "shall be given by the sum of";
     Comma a b = {s = a.s ++ "," ++ b.s};
     And = {s = "and"};
+    WithThe q = {s = "the" ++ q.s};
+    Numberof = {s = "the number of"};
   oper
     LinKind : Type = {s: Str};
     mkKind : Str -> LinKind;
