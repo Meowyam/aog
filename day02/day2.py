@@ -25,7 +25,6 @@ def getWhich(tree,eng):
     shares = args[1]
     return((getName(shares,eng)))
   elif (constructor=="UnnumberedKind"):
-    print("getWhich")
     var1 = args[0]
     name = getName(var1,eng)
     return((name))
@@ -39,17 +38,29 @@ def getSum(tree,eng):
   result = add(args[1],args[2],eng)
   return(result)
 
+def getComma(tree,eng):
+  constructor,args = tree.unpack()
+  var0,_ = args[0].unpack()
+  var1,_ = args[1].unpack()
+  cons,ars = args[0].unpack()
+  if (var0 == "NumberedKind") and (var1 == "SumOf"):
+    num = (numberShares[getName(ars[1],eng)])
+    summ = getNumber(args[1],eng)
+    return(num + summ)
+  elif (var0 == "UnnumberedKind") and (var1 == "SumOf"):
+    num = (numberShares[getName(ars[0],eng)])
+    summ = getNumber(args[1],eng)
+    return(num + summ)
+  else:
+    pass
+
 def add(tree1,tree2,eng):
-  print("add")
-  print(tree1)
-  print(getWhich(tree1,eng))
   ls = ([getWhich(tree1,eng),getWhich(tree2,eng)])
   vals = [numberShares[x] for x in ls]
   return (sum(vals))
 
 def getName(tree,eng):
   constructor,args = tree.unpack()
-  print("getname",constructor)
   mod,ignore = args[0].unpack()
   theOrNo = eng.linearize(args[0])
   ls = theOrNo.split()
@@ -61,7 +72,6 @@ def getName(tree,eng):
 
 def getNumber(tree,eng):
   constructor,args = tree.unpack()
-  print(constructor)
   if constructor == "Thousand":
     return 1000
   elif constructor == "Hundred":
@@ -69,6 +79,8 @@ def getNumber(tree,eng):
   elif constructor == "SumOf":
     sum = getSum(tree,eng)
     return sum
+  elif constructor == "Comma":
+    return(getComma(tree,eng))
   else:
     pass
 
@@ -80,7 +92,6 @@ def interpret(tree,eng):
 
 
 def readEachShare(x):
-    print(x)
     if (eng.parse(x)):
       ogSharesIter = eng.parse(x)
       p,ogShares = ogSharesIter.__next__()
