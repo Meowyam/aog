@@ -52,10 +52,12 @@ def getName(tree,eng):
   print("getname",constructor)
   mod,ignore = args[0].unpack()
   theOrNo = eng.linearize(args[0])
-  if len(theOrNo) == 1:
-    return(theOrNo)
+  ls = theOrNo.split()
+  if (len(ls) > 1) and (ls[0] == "the"):
+    del ls[0]
+    return(' '.join(ls))
   else:
-    return(theOrNo[-1])
+    return(theOrNo)
 
 def getNumber(tree,eng):
   constructor,args = tree.unpack()
@@ -90,7 +92,7 @@ def readEachShare(x):
 if __name__ == '__main__':
     gr = pgf.readPGF("Shares.pgf")
     eng = gr.languages["SharesE"]
-    f = open("input.txt", "r")
+    f = open("full.txt", "r")
     all = list(filter(None, f.read().splitlines()))
     # print(all)
 
