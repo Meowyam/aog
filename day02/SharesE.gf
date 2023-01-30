@@ -28,26 +28,47 @@ concrete SharesE of Shares = open Prelude in {
     -- UnSharedKind k = {
     --   s = k.s;
     -- };
+    NumberItem n = {
+      s = n.s;
+    };
     Shares t = {
       s = t.s ++ "shares";
     };
     SumOf sum a b = {
       s = a.s ++ sum.s ++ b.s;
     };
+    DoubleNum n t = {
+      s = n.s ++ t.s ;
+    };
     -- Shares = mkKind "shares";
     Old = mkQuality "original";
     New = mkQuality "new";
-    Thousand = {s = "1000"};
-    Hundred = {s = "two hundred"};
+
     Class string = {
       s = "Class" ++ string.s;
     };
     IsSum = mkEquals "is the sum of";
+    SummOf = mkEquals "the sum of";
+    Is = mkEquals "is";
     Given = mkEquals "shall be given by the sum of";
     Comma a b = {s = a.s ++ "," ++ b.s};
     And = {s = "and"};
+    Plus = {s = "plus"};
+    Multiply = {s = "multiplied by"};
     WithThe q = {s = "the" ++ q.s};
     Numberof = {s = "the number of"};
+
+    Thousand = {s = "1000"};
+    Hundred = {s = "hundred"};
+    Two = {s = "two"};
+    Three = {s = "three"};
+    Four = {s = "four"};
+    Five = {s = "five"};
+    Six = {s = "six"};
+    Ten = {s = "ten"};
+    Twelve = {s = "twelve"};
+    Twenty = {s = "twenty"};
+    Ninety = {s = "ninety"};
   oper
     LinKind : Type = {s: Str};
     mkKind : Str -> LinKind;

@@ -25,3 +25,7 @@ the number of Class J shares is the sum of Class B and Class C shares
 the number of Class K shares is the sum of the Class I and the Class J shares
 
 the number of Class L shares is the sum of the number of Class K , Class G and Class H shares
+
+ten is five plus five
+
+twelve is six multiplied by two

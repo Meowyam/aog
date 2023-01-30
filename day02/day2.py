@@ -15,6 +15,10 @@ def parseAndValidate(tree):
     sumOf,_ = args[2].unpack()
     if (numOf=="NumberedKind") or (numOf=="UnnumberedKind"):
       return (args[1],args[2])
+    elif (numOf=="NumberItem"):
+      return (args[1],args[2])
+    else:
+      pass
   else:
       print("some other thing")
       print(tree)
@@ -28,14 +32,23 @@ def getWhich(tree,eng):
     var1 = args[0]
     name = getName(var1,eng)
     return((name))
+  elif (constructor=="NumberItem"):
+    x,_ = args[0].unpack()
+    print(engNums[x])
+    return(engNums[x])
   else:
     pass
 
 def getSum(tree,eng):
   constructor,args = tree.unpack()
+  whichAdd,_ = args[0].unpack()
   var1,_ = args[1].unpack()
   var2,_ = args[2].unpack()
-  result = add(args[1],args[2],eng)
+  if (var1 == "NumberItem"):
+    print(var1,var2)
+    result = addNum(args[1],args[2],whichAdd,eng)
+  else:
+    result = add(args[1],args[2],eng)
   return(result)
 
 def getComma(tree,eng):
@@ -59,6 +72,16 @@ def add(tree1,tree2,eng):
   vals = [numberShares[x] for x in ls]
   return (sum(vals))
 
+def addNum(tree1,tree2,whichAdd,eng):
+  ls = ([getWhich(tree1,eng),getWhich(tree2,eng)])
+  if (whichAdd == "Plus"):
+    return(sum(ls))
+  elif (whichAdd == "Multiply"):
+    mult = 1
+    for x in ls:
+      mult = mult * x
+    return(mult)
+
 def getName(tree,eng):
   constructor,args = tree.unpack()
   mod,ignore = args[0].unpack()
@@ -72,17 +95,39 @@ def getName(tree,eng):
 
 def getNumber(tree,eng):
   constructor,args = tree.unpack()
-  if constructor == "Thousand":
-    return 1000
-  elif constructor == "Hundred":
-    return 200
+  if constructor in engNums:
+    val = engNums[constructor]
+    return(val)
+  elif constructor == "DoubleNum":
+    return(doubleNum(args))
   elif constructor == "SumOf":
     sum = getSum(tree,eng)
-    return sum
+    return(sum)
   elif constructor == "Comma":
     return(getComma(tree,eng))
   else:
     pass
+
+def doubleNum(arg):
+  x,_ = arg[0].unpack()
+  y,_ = arg[1].unpack()
+  if (x in engNums) and (y in engNums):
+    return(engNums[x] * engNums[y])
+  else:
+    print("number error:",x,y)
+
+engNums = {
+  "Thousand" : 1000,
+  "Hundred" : 100,
+  "Two" : 2,
+  "Four" : 4,
+  "Five" : 5,
+  "Six" : 6,
+  "Ten" : 10,
+  "Twelve" : 12,
+  "Twenty" : 20,
+  "Ninety" : 90
+}
 
 def interpret(tree,eng):
     numOf,number = parseAndValidate(tree)
@@ -92,13 +137,13 @@ def interpret(tree,eng):
 
 
 def readEachShare(x):
+    print(x)
     if (eng.parse(x)):
       ogSharesIter = eng.parse(x)
       p,ogShares = ogSharesIter.__next__()
       return(ogShares)
     else:
       print("error")
-      print(x)
 
 if __name__ == '__main__':
     gr = pgf.readPGF("Shares.pgf")

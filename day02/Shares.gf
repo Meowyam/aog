@@ -20,6 +20,8 @@ abstract Shares = {
     UnnumberedKind : Kind -> Item;
     -- UnSharedKind : Kind -> Item;
     Shares: Kind -> Kind;
+    NumberItem : Number -> Item;
+    DoubleNum : Number -> Number -> Number;
 
     Mod : Quality -> Kind;
 
@@ -30,9 +32,10 @@ abstract Shares = {
     SumOf : Sum -> Item -> Item -> SumItem;
     Comma: Item -> SumItem -> SumItem;
 
-    Thousand, Hundred : Number;
-    IsSum, Given: Equals;
-    And: Sum;
+    Thousand, Hundred, Two, Three, Four, Five, Six, Ten, Twelve, Twenty, Ninety: Number;
+
+    SummOf, IsSum, Given, Is: Equals;
+    And, Plus, Multiply: Sum;
     Numberof : What;
 
 }
