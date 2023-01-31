@@ -19,6 +19,9 @@ def parseAndValidate(tree):
       return (args[1],args[2])
     else:
       pass
+  elif constructor=="MultiSum":
+    for a in args:
+      print(a)
   else:
       print("some other thing")
       print(tree)
