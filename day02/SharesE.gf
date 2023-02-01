@@ -16,12 +16,12 @@ concrete SharesE of Shares = open Prelude in {
     SumPred eq a b = {
       s = a.s ++ eq.s ++ b.s;
     };
-    SimpleSumPred eq a = {
-      s = eq.s ++ a.s;
-    };
-    MultiSum eq sum a b c = {
-      s = a.s ++ eq.s ++ b.s ++ sum.s ++ c.s;
-    };
+    -- SimpleSumPred eq a = {
+    --   s = eq.s ++ a.s;
+    -- };
+    -- MultiSum eq a b sum c = {
+    --   s = a.s ++ eq.s ++ b.s ++ sum.s ++ c.s;
+    -- };
     Mod q = {
       s = q.s;
     };
@@ -39,6 +39,9 @@ concrete SharesE of Shares = open Prelude in {
     };
     Shares t = {
       s = t.s ++ "shares";
+    };
+    MultiSumOf sum a eq b = {
+      s = a.s ++ sum.s ++ eq.s ++ b.s;
     };
     SumOf sum a b = {
       s = a.s ++ sum.s ++ b.s;

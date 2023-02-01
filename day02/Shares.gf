@@ -15,9 +15,6 @@ abstract Shares = {
   fun
     Pred : Item -> Number -> Comment;
     SumPred : Equals -> Item -> SumItem -> Comment;
-    SimpleSumPred : Equals -> SumItem -> Comment;
-    MultiSum : Equals -> Sum -> Item -> Item -> Comment -> Comment;
-
 
     NumberedKind : What -> Kind -> Item;
     UnnumberedKind : Kind -> Item;
@@ -32,6 +29,10 @@ abstract Shares = {
     WithThe : Quality -> Quality;
     Class : String -> Quality ;
 
+-- twenty is four multiplied by the sum of two and three
+-- four multiplied by the sum of two and three
+
+    MultiSumOf : Sum -> Item -> Equals -> SumItem -> SumItem;
     SumOf : Sum -> Item -> Item -> SumItem;
     Comma : Item -> SumItem -> SumItem;
 

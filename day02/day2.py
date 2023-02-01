@@ -10,7 +10,7 @@ def parseAndValidate(tree):
       return (args[0],args[1])
     else:
       print("no")
-  elif constructor=="SumPred":
+  elif (constructor=="SumPred"):
     numOf,_ = args[1].unpack()
     sumOf,_ = args[2].unpack()
     if (numOf=="NumberedKind") or (numOf=="UnnumberedKind"):
@@ -19,9 +19,6 @@ def parseAndValidate(tree):
       return (args[1],args[2])
     else:
       pass
-  elif constructor=="MultiSum":
-    for a in args:
-      print(a)
   else:
       print("some other thing")
       print(tree)
@@ -48,7 +45,6 @@ def getSum(tree,eng):
   var1,_ = args[1].unpack()
   var2,_ = args[2].unpack()
   if (var1 == "NumberItem"):
-    print(var1,var2)
     result = addNum(args[1],args[2],whichAdd,eng)
   else:
     result = add(args[1],args[2],eng)
@@ -75,15 +71,18 @@ def add(tree1,tree2,eng):
   vals = [numberShares[x] for x in ls]
   return (sum(vals))
 
+
 def addNum(tree1,tree2,whichAdd,eng):
   ls = ([getWhich(tree1,eng),getWhich(tree2,eng)])
-  if (whichAdd == "Plus"):
+  if (whichAdd == "Plus") or (whichAdd == "And"):
     return(sum(ls))
   elif (whichAdd == "Multiply"):
     mult = 1
     for x in ls:
       mult = mult * x
     return(mult)
+  else:
+    pass
 
 def getName(tree,eng):
   constructor,args = tree.unpack()
@@ -106,6 +105,16 @@ def getNumber(tree,eng):
   elif constructor == "SumOf":
     sum = getSum(tree,eng)
     return(sum)
+  elif constructor == "MultiSumOf":
+    lastSum = getSum(args[3],eng)
+    op,_ = args[0].unpack()
+    num = getWhich(args[1],eng)
+    if (op == "Plus"):
+      return(num + lastSum)
+    elif (op == "Multiply"):
+      return(num * lastSum)
+    else:
+      print("diff operator: ",op)
   elif constructor == "Comma":
     return(getComma(tree,eng))
   else:
@@ -123,6 +132,7 @@ engNums = {
   "Thousand" : 1000,
   "Hundred" : 100,
   "Two" : 2,
+  "Three" : 3,
   "Four" : 4,
   "Five" : 5,
   "Six" : 6,
