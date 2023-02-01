@@ -28,19 +28,17 @@ abstract Shares = {
     Old,New : Quality;
     WithThe : Quality -> Quality;
     Class : String -> Quality ;
-
--- twenty is four multiplied by the sum of two and three
--- four multiplied by the sum of two and three
+    Alpha,Beta,Delta,Gamma : Quality ;
 
     MultiSumOf : Sum -> Item -> Equals -> SumItem -> SumItem;
     SumOf : Sum -> Item -> Item -> SumItem;
     Comma : Item -> SumItem -> SumItem;
 
-    Thousand, Hundred, Two, Three, Four, Five, Six, Ten, Twelve, Twenty, Ninety: Number;
+    Thousand, Hundred, Two, Three, Four, Five, Six, Ten, Twelve, Twenty, Ninety, Percent: Number;
 
-    SummOf, IsSum, Given, Is: Equals;
-    And, Plus, Multiply: Sum;
-    Numberof : What;
+    Greater, Lesser, SummOf, IsSum, Given, Is: Equals;
+    And, Plus, Multiply, Less: Sum;
+    Numberof, Valueof : What;
 
 }
 

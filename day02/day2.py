@@ -7,21 +7,31 @@ def parseAndValidate(tree):
   if constructor=="Pred":
     numOf,_ = args[0].unpack()
     if numOf=="NumberedKind":
-      return (args[0],args[1])
+      sharesVariable = getWhich(args[0],eng)
+      sharesValue = getNumber(args[1],eng)
+      return [sharesVariable,sharesValue]
     else:
       print("no")
   elif (constructor=="SumPred"):
+    typeEquals,_ = args[0].unpack()
     numOf,_ = args[1].unpack()
     sumOf,_ = args[2].unpack()
-    if (numOf=="NumberedKind") or (numOf=="UnnumberedKind"):
-      return (args[1],args[2])
-    elif (numOf=="NumberItem"):
-      return (args[1],args[2])
+    if (typeEquals=="Lesser") or (typeEquals=="Greater"):
+      print(typeEquals)
+      sharesVariable = getWhich(args[1],eng)
+      sharesValue = compare(args[2],typeEquals,eng)
+      return [sharesVariable,sharesValue]
     else:
-      pass
+      if (numOf=="NumberedKind") or (numOf=="UnnumberedKind") or (numOf=="NumberItem"):
+        sharesVariable = getWhich(args[1],eng)
+        sharesValue = getNumber(args[2],eng)
+        return [sharesVariable,sharesValue]
+      else:
+        pass
   else:
       print("some other thing")
       print(tree)
+
 
 def getWhich(tree,eng):
   constructor,args = tree.unpack()
@@ -33,9 +43,17 @@ def getWhich(tree,eng):
     name = getName(var1,eng)
     return((name))
   elif (constructor=="NumberItem"):
-    x,_ = args[0].unpack()
-    print(engNums[x])
-    return(engNums[x])
+    cons,ars = args[0].unpack()
+    if (cons in engNums):
+      return(engNums[cons])
+    elif (cons == "DoubleNum"):
+      x,_ = ars[0].unpack()
+      y,_ = ars[1].unpack()
+      if (y == "Percent"):
+        print((engNums[x])/100)
+        return((engNums[x])/100)
+      else:
+        doubleNum(ars)
   else:
     pass
 
@@ -81,6 +99,8 @@ def addNum(tree1,tree2,whichAdd,eng):
     for x in ls:
       mult = mult * x
     return(mult)
+  elif (whichAdd == "Less"):
+   return(ls[0] - ls[1])
   else:
     pass
 
@@ -94,6 +114,21 @@ def getName(tree,eng):
     return(' '.join(ls))
   else:
     return(theOrNo)
+
+
+def compare(tree,less,eng):
+  constructor,args = tree.unpack()
+  ls = []
+  for a in args[1:]:
+    ls.append(getWhich(a,eng))
+  if (less == "Lesser"):
+    print(min(ls))
+    return(min(ls))
+  elif (less == "Greater"):
+    print(max(ls))
+    return(max(ls))
+  else:
+    pass
 
 def getNumber(tree,eng):
   constructor,args = tree.unpack()
@@ -123,6 +158,7 @@ def getNumber(tree,eng):
 def doubleNum(arg):
   x,_ = arg[0].unpack()
   y,_ = arg[1].unpack()
+  print(x,y)
   if (x in engNums) and (y in engNums):
     return(engNums[x] * engNums[y])
   else:
@@ -143,9 +179,9 @@ engNums = {
 }
 
 def interpret(tree,eng):
-    numOf,number = parseAndValidate(tree)
-    sharesVariable = getWhich(numOf,eng)    # :: String
-    sharesValue = getNumber(number,eng) # :: Int
+    results = parseAndValidate(tree)
+    sharesVariable = results[0]    # :: String
+    sharesValue = results[1] # :: Int
     numberShares[sharesVariable] = sharesValue
 
 

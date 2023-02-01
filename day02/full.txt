@@ -31,3 +31,9 @@ ten is five plus five
 twelve is six multiplied by two
 
 twenty is four multiplied by the sum of two and three
+
+the value of Alpha shall be given by the greater of twelve and twenty
+
+the value of Beta shall be given by the lesser of twelve and twenty
+
+the value of Gamma is twenty less ten percent

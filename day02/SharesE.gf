@@ -56,16 +56,24 @@ concrete SharesE of Shares = open Prelude in {
     Class string = {
       s = "Class" ++ string.s;
     };
+    Alpha = mkQuality "Alpha";
+    Beta = mkQuality "Beta";
+    Delta = mkQuality "Delta";
+    Gamma = mkQuality "Gamma";
     IsSum = mkEquals "is the sum of";
     SummOf = mkEquals "the sum of";
     Is = mkEquals "is";
     Given = mkEquals "shall be given by the sum of";
+    Lesser = mkEquals "shall be given by the lesser of";
+    Greater = mkEquals "shall be given by the greater of";
     Comma a b = {s = a.s ++ "," ++ b.s};
     And = {s = "and"};
     Plus = {s = "plus"};
     Multiply = {s = "multiplied by"};
+    Less = {s = "less"};
     WithThe q = {s = "the" ++ q.s};
     Numberof = {s = "the number of"};
+    Valueof = {s = "the value of"};
 
     Thousand = {s = "1000"};
     Hundred = {s = "hundred"};
@@ -78,6 +86,7 @@ concrete SharesE of Shares = open Prelude in {
     Twelve = {s = "twelve"};
     Twenty = {s = "twenty"};
     Ninety = {s = "ninety"};
+    Percent = {s = "percent"};
   oper
     LinKind : Type = {s: Str};
     mkKind : Str -> LinKind;
