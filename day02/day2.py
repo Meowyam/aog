@@ -100,7 +100,11 @@ def addNum(tree1,tree2,whichAdd,eng):
       mult = mult * x
     return(mult)
   elif (whichAdd == "Less"):
-   return(ls[0] - ls[1])
+    isPercent = getName(tree2,eng).split()
+    if (len(isPercent) == 2) and (isPercent[-1] == "percent"):
+      return(ls[0] - (ls[1] * ls[0]))
+    else:
+      return(ls[0] - ls[1])
   else:
     pass
 
