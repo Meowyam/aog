@@ -1,4 +1,5 @@
 import pgf
+import operator
 
 numberShares = {}
 
@@ -15,12 +16,14 @@ def parseAndValidate(tree):
   elif (constructor=="SumPred"):
     typeEquals,_ = args[0].unpack()
     numOf,_ = args[1].unpack()
-    sumOf,_ = args[2].unpack()
+    sumOf,ars = args[2].unpack()
     if (typeEquals=="Lesser") or (typeEquals=="Greater"):
-      print(typeEquals)
-      sharesVariable = getWhich(args[1],eng)
-      sharesValue = compare(args[2],typeEquals,eng)
-      return [sharesVariable,sharesValue]
+      if (isinstance(checkSumOf(ars),str)):
+        return([getWhich(args[1],eng),checkSumOf(ars)])
+      else:
+        sharesVariable = getWhich(args[1],eng)
+        sharesValue = compare(args[2],typeEquals,eng)
+        return [sharesVariable,sharesValue]
     else:
       if (numOf=="NumberedKind") or (numOf=="UnnumberedKind") or (numOf=="NumberItem"):
         sharesVariable = getWhich(args[1],eng)
@@ -32,6 +35,16 @@ def parseAndValidate(tree):
       print("some other thing")
       print(tree)
 
+def checkSumOf(sumof):
+  ls = []
+  for s in sumof[1:]:
+    l = getWhich(s,eng)
+    ls.append(l)
+  if (isinstance(ls[0],str)) and "price" in ls[0]:
+    st = (ls[0] + "*" + str(numberShares[(ls[1])]))
+    return(st)
+  else:
+    pass
 
 def getWhich(tree,eng):
   constructor,args = tree.unpack()
@@ -93,20 +106,29 @@ def add(tree1,tree2,eng):
 def addNum(tree1,tree2,whichAdd,eng):
   ls = ([getWhich(tree1,eng),getWhich(tree2,eng)])
   if (whichAdd == "Plus") or (whichAdd == "And"):
-    return(sum(ls))
+    # print("hi",ls)
+    # return(sum(ls))
+    return(isPercent(tree2,ls,operator.add))
   elif (whichAdd == "Multiply"):
     mult = 1
     for x in ls:
       mult = mult * x
     return(mult)
   elif (whichAdd == "Less"):
-    isPercent = getName(tree2,eng).split()
-    if (len(isPercent) == 2) and (isPercent[-1] == "percent"):
-      return(ls[0] - (ls[1] * ls[0]))
-    else:
-      return(ls[0] - ls[1])
+    return(isPercent(tree2,ls,operator.sub))
   else:
     pass
+
+def isPercent(tree,ls,op):
+  if (isinstance(getWhich(tree,eng),int)):
+    return(sum(ls))
+  else:
+    isPercent = getName(tree,eng).split()
+    if (len(isPercent) == 2) and (isPercent[-1] == "percent"):
+      return(op(ls[0],(ls[1] * ls[0])))
+    else:
+      return(op(ls[0],ls[1]))
+
 
 def getName(tree,eng):
   constructor,args = tree.unpack()
@@ -184,6 +206,7 @@ engNums = {
 
 def interpret(tree,eng):
     results = parseAndValidate(tree)
+    print("hey",results)
     sharesVariable = results[0]    # :: String
     sharesValue = results[1] # :: Int
     numberShares[sharesVariable] = sharesValue

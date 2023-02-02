@@ -29,6 +29,7 @@ abstract Shares = {
     WithThe : Quality -> Quality;
     Class : String -> Quality ;
     Alpha,Beta,Delta,Gamma : Quality ;
+    PriceClass : String -> Quality ;
 
     MultiSumOf : Sum -> Item -> Equals -> SumItem -> SumItem;
     SumOf : Sum -> Item -> Item -> SumItem;
@@ -36,7 +37,7 @@ abstract Shares = {
 
     Thousand, Hundred, Two, Three, Four, Five, Six, Ten, Twelve, Twenty, Ninety, Percent: Number;
 
-    Greater, Lesser, SummOf, IsSum, Given, Is: Equals;
+    Greater, Lesser, SummOf, IsSum, Given, GivenSum, Is: Equals;
     And, Plus, Multiply, Less: Sum;
     Numberof, Valueof : What;
 

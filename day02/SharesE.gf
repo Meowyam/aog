@@ -56,6 +56,9 @@ concrete SharesE of Shares = open Prelude in {
     Class string = {
       s = "Class" ++ string.s;
     };
+    PriceClass string = {
+      s = string.s ++ "price";
+    };
     Alpha = mkQuality "Alpha";
     Beta = mkQuality "Beta";
     Delta = mkQuality "Delta";
@@ -63,7 +66,8 @@ concrete SharesE of Shares = open Prelude in {
     IsSum = mkEquals "is the sum of";
     SummOf = mkEquals "the sum of";
     Is = mkEquals "is";
-    Given = mkEquals "shall be given by the sum of";
+    Given = mkEquals "shall be given by";
+    GivenSum = mkEquals "shall be given by the sum of";
     Lesser = mkEquals "shall be given by the lesser of";
     Greater = mkEquals "shall be given by the greater of";
     Comma a b = {s = a.s ++ "," ++ b.s};

@@ -37,3 +37,7 @@ the value of Alpha shall be given by the greater of twelve and twenty
 the value of Beta shall be given by the lesser of twelve and twenty
 
 the value of Gamma is twenty less ten percent
+
+the value of Delta shall be given by Gamma plus ten
+
+the value of the Class L shares shall be given by the lesser of the conversion price multiplied by the number of Class L shares
