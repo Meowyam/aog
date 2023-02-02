@@ -15,6 +15,8 @@ abstract Shares = {
   fun
     Pred : Item -> Number -> Comment;
     SumPred : Equals -> Item -> SumItem -> Comment;
+    DoublePred : Sum -> Comment -> Item -> SumItem -> Comment;
+
 
     NumberedKind : What -> Kind -> Item;
     UnnumberedKind : Kind -> Item;
@@ -38,7 +40,7 @@ abstract Shares = {
     Thousand, Hundred, Two, Three, Four, Five, Six, Ten, Twelve, Twenty, Ninety, Percent: Number;
 
     Greater, Lesser, SummOf, IsSum, Given, GivenSum, Is: Equals;
-    And, Plus, Multiply, Less: Sum;
+    CommAnd, And, Plus, Multiply, Less: Sum;
     Numberof, Valueof : What;
 
 }

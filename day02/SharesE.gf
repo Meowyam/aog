@@ -72,6 +72,7 @@ concrete SharesE of Shares = open Prelude in {
     Greater = mkEquals "shall be given by the greater of";
     Comma a b = {s = a.s ++ "," ++ b.s};
     And = {s = "and"};
+    CommAnd = {s = ", and"};
     Plus = {s = "plus"};
     Multiply = {s = "multiplied by"};
     Less = {s = "less"};
