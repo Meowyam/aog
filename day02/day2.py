@@ -34,8 +34,11 @@ def parseAndValidate(tree):
   elif (constructor=="DoublePred"):
     isitPred,ars = args[1].unpack()
     if (isitPred == "SumPred") or (isitPred == "Pred"):
-      noEquals(args[2])
-      return(parseAndValidate(args[1]))
+      sumitem = noEquals(args[2])
+      comment = parseAndValidate(args[1])
+      op,_ = args[0].unpack()
+      result = sumitem + " " + wordOps[op] + " " + comment[1]
+      return([comment[0],result])
     else:
       print("unknown Comment",isitPred,args[1])
   else:
@@ -52,29 +55,33 @@ def noEquals(phrase):
       return(addNum(args[0],args[2],args[1],eng))
     elif (isinstance(sumitem,list)):
       num1 = checkInt(sumitem)
-      print("hi")
+      price = getPriceClass(sumitem)
+      sumOf,sumArg = args[0].unpack()
+      op,_ = sumArg[0].unpack()
       c,ar = args[2].unpack()
       num2 = (ifPercent(ar))
       result = withPercent([num1,num2],ops[summ])
-      print(result)
-      return(result)
-    # elif (len(sumitem) == 2) and (isinstance(sumitem[0],int)):
-    #   print(morevagueAddNum(args[2],[sumitem[0],getWhich(args[2],eng)],args[1],eng))
-    # elif (len(sumitem) == 2) and (isinstance(sumitem[1],int)):
-    #   print(morevagueAddNum(args[2],[sumitem[1],getWhich(args[2],eng)],args[1],eng))
+      res = price + wordOps[op] + str(result)
+      print(res)
+      return(res)
     else:
       pass
-    # ls = [sumitem,getWhich(args[2],eng)]
   else:
     print("nono")
 
 def checkInt(ls):
   for l in ls:
     if (isinstance(l,int)):
-      print("int",l)
       return(l)
     else:
-      print("no integer")
+      pass
+
+def getPriceClass(ls):
+  for l in ls:
+    if (isinstance(l,str)):
+      return(l)
+    else:
+      print("no string")
 
 def checkSumOf(sumof):
   ls = []
@@ -108,9 +115,7 @@ def getWhich(tree,eng):
 def ifPercent(ars):
   x,_ = ars[0].unpack()
   y,_ = ars[1].unpack()
-  print("herre",x,y)
   if (y == "Percent"):
-    print((engNums[x])/100)
     return((engNums[x])/100)
   else:
     return(doubleNum(ars))
@@ -121,7 +126,6 @@ def getSum(tree,eng):
   whichAdd,_ = args[0].unpack()
   var1,_ = args[1].unpack()
   var2,_ = args[2].unpack()
-  print(whichAdd,var1,var2)
   if (var1 == "NumberItem"):
     result = addNum(args[1],args[2],whichAdd,eng)
   else:
@@ -146,9 +150,7 @@ def getComma(tree,eng):
 
 def add(tree1,tree2,eng):
   ls = ([getWhich(tree1,eng),getWhich(tree2,eng)])
-  print("hey",ls)
   if (isinstance(ls[0],str)) and "price" in ls[0]:
-    print([ls[0],numberShares[(ls[1])]])
     return([ls[0],numberShares[(ls[1])]])
   else:
     vals = [numberShares[x] for x in ls]
@@ -156,7 +158,6 @@ def add(tree1,tree2,eng):
 
 def addNum(tree1,tree2,whichAdd,eng):
   ls = ([getWhich(tree1,eng),getWhich(tree2,eng)])
-  print("addNum",tree1,tree2)
   return(morevagueAddNum(tree2,ls,whichAdd,eng))
 
 def morevagueAddNum(tree2,ls,whichAdd,eng):
@@ -205,10 +206,8 @@ def compare(tree,less,eng):
   for a in args[1:]:
     ls.append(getWhich(a,eng))
   if (less == "Lesser"):
-    print(min(ls))
     return(min(ls))
   elif (less == "Greater"):
-    print(max(ls))
     return(max(ls))
   else:
     pass
@@ -241,7 +240,6 @@ def getNumber(tree,eng):
 def doubleNum(arg):
   x,_ = arg[0].unpack()
   y,_ = arg[1].unpack()
-  print(x,y)
   if (x in engNums) and (y in engNums):
     return(engNums[x] * engNums[y])
   else:
@@ -264,12 +262,20 @@ engNums = {
 ops = {
   "Less" : operator.sub,
   "Plus" : operator.add,
-  "And"  : operator.add
+  "And"  : operator.add,
+  "CommAnd" : operator.add
+}
+
+wordOps = {
+  "Less" : "-",
+  "Plus" : "+",
+  "And"  : "+",
+  "CommAnd" : "+",
+  "Multiply" : "*"
 }
 
 def interpret(tree,eng):
     results = parseAndValidate(tree)
-    print("hey",results)
     sharesVariable = results[0]    # :: String
     sharesValue = results[1] # :: Int
     numberShares[sharesVariable] = sharesValue
