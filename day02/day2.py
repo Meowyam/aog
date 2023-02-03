@@ -31,9 +31,50 @@ def parseAndValidate(tree):
         return [sharesVariable,sharesValue]
       else:
         pass
+  elif (constructor=="DoublePred"):
+    isitPred,ars = args[1].unpack()
+    if (isitPred == "SumPred") or (isitPred == "Pred"):
+      noEquals(args[2])
+      return(parseAndValidate(args[1]))
+    else:
+      print("unknown Comment",isitPred,args[1])
   else:
       print("some other thing")
       print(tree)
+
+def noEquals(phrase):
+  cons,args = phrase.unpack()
+  if (cons == "NoEquals"):
+    sumitem = getNumber(args[0],eng)
+    summ,_ = args[1].unpack()
+    item = args[2].unpack()
+    if (isinstance(sumitem,int)):
+      return(addNum(args[0],args[2],args[1],eng))
+    elif (isinstance(sumitem,list)):
+      num1 = checkInt(sumitem)
+      print("hi")
+      c,ar = args[2].unpack()
+      num2 = (ifPercent(ar))
+      result = withPercent([num1,num2],ops[summ])
+      print(result)
+      return(result)
+    # elif (len(sumitem) == 2) and (isinstance(sumitem[0],int)):
+    #   print(morevagueAddNum(args[2],[sumitem[0],getWhich(args[2],eng)],args[1],eng))
+    # elif (len(sumitem) == 2) and (isinstance(sumitem[1],int)):
+    #   print(morevagueAddNum(args[2],[sumitem[1],getWhich(args[2],eng)],args[1],eng))
+    else:
+      pass
+    # ls = [sumitem,getWhich(args[2],eng)]
+  else:
+    print("nono")
+
+def checkInt(ls):
+  for l in ls:
+    if (isinstance(l,int)):
+      print("int",l)
+      return(l)
+    else:
+      print("no integer")
 
 def checkSumOf(sumof):
   ls = []
@@ -60,21 +101,27 @@ def getWhich(tree,eng):
     if (cons in engNums):
       return(engNums[cons])
     elif (cons == "DoubleNum"):
-      x,_ = ars[0].unpack()
-      y,_ = ars[1].unpack()
-      if (y == "Percent"):
-        print((engNums[x])/100)
-        return((engNums[x])/100)
-      else:
-        doubleNum(ars)
+      return(ifPercent(ars))
   else:
     pass
+
+def ifPercent(ars):
+  x,_ = ars[0].unpack()
+  y,_ = ars[1].unpack()
+  print("herre",x,y)
+  if (y == "Percent"):
+    print((engNums[x])/100)
+    return((engNums[x])/100)
+  else:
+    return(doubleNum(ars))
+
 
 def getSum(tree,eng):
   constructor,args = tree.unpack()
   whichAdd,_ = args[0].unpack()
   var1,_ = args[1].unpack()
   var2,_ = args[2].unpack()
+  print(whichAdd,var1,var2)
   if (var1 == "NumberItem"):
     result = addNum(args[1],args[2],whichAdd,eng)
   else:
@@ -99,23 +146,31 @@ def getComma(tree,eng):
 
 def add(tree1,tree2,eng):
   ls = ([getWhich(tree1,eng),getWhich(tree2,eng)])
-  vals = [numberShares[x] for x in ls]
-  return (sum(vals))
-
+  print("hey",ls)
+  if (isinstance(ls[0],str)) and "price" in ls[0]:
+    print([ls[0],numberShares[(ls[1])]])
+    return([ls[0],numberShares[(ls[1])]])
+  else:
+    vals = [numberShares[x] for x in ls]
+    return (sum(vals))
 
 def addNum(tree1,tree2,whichAdd,eng):
   ls = ([getWhich(tree1,eng),getWhich(tree2,eng)])
+  print("addNum",tree1,tree2)
+  return(morevagueAddNum(tree2,ls,whichAdd,eng))
+
+def morevagueAddNum(tree2,ls,whichAdd,eng):
   if (whichAdd == "Plus") or (whichAdd == "And"):
     # print("hi",ls)
     # return(sum(ls))
-    return(isPercent(tree2,ls,operator.add))
+    return(isPercent(tree2,ls,ops[whichAdd]))
   elif (whichAdd == "Multiply"):
     mult = 1
     for x in ls:
       mult = mult * x
     return(mult)
   elif (whichAdd == "Less"):
-    return(isPercent(tree2,ls,operator.sub))
+    return(isPercent(tree2,ls,ops[whichAdd]))
   else:
     pass
 
@@ -125,10 +180,12 @@ def isPercent(tree,ls,op):
   else:
     isPercent = getName(tree,eng).split()
     if (len(isPercent) == 2) and (isPercent[-1] == "percent"):
-      return(op(ls[0],(ls[1] * ls[0])))
+      return(withPercent(ls,op))
     else:
       return(op(ls[0],ls[1]))
 
+def withPercent(ls,op):
+  return(op(ls[0],(ls[1] * ls[0])))
 
 def getName(tree,eng):
   constructor,args = tree.unpack()
@@ -202,6 +259,12 @@ engNums = {
   "Twelve" : 12,
   "Twenty" : 20,
   "Ninety" : 90
+}
+
+ops = {
+  "Less" : operator.sub,
+  "Plus" : operator.add,
+  "And"  : operator.add
 }
 
 def interpret(tree,eng):

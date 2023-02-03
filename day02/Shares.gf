@@ -15,7 +15,14 @@ abstract Shares = {
   fun
     Pred : Item -> Number -> Comment;
     SumPred : Equals -> Item -> SumItem -> Comment;
-    DoublePred : Sum -> Comment -> Item -> SumItem -> Comment;
+
+-- the value of the Class L shares shall be given by the lesser of the conversion price multiplied by the number of Class L shares -> comment
+-- and / the purchase price multiplied by the number of new shares
+-- sum / (SumOf Multiply (UnnumberedKind (Mod (WithThe (PriceClass "purchase")))) (NumberedKind Numberof (Shares (Mod New))))
+-- less twenty percent
+-- sum -> Number
+
+    DoublePred : Sum -> Comment -> SumItem -> Comment;
 
 
     NumberedKind : What -> Kind -> Item;
@@ -34,6 +41,7 @@ abstract Shares = {
     PriceClass : String -> Quality ;
 
     MultiSumOf : Sum -> Item -> Equals -> SumItem -> SumItem;
+    NoEquals : SumItem -> Sum -> Number -> SumItem;
     SumOf : Sum -> Item -> Item -> SumItem;
     Comma : Item -> SumItem -> SumItem;
 
