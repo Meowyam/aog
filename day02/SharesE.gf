@@ -92,6 +92,10 @@ concrete SharesE of Shares = open Prelude in {
     Twenty = {s = "twenty"};
     Ninety = {s = "ninety"};
     Percent = {s = "percent"};
+    IntPerc = {s = "%"};
+    IntNum int = {
+      s = int.s;
+    };
   oper
     LinKind : Type = {s: Str};
     mkKind : Str -> LinKind;

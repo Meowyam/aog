@@ -47,6 +47,9 @@ abstract Shares = {
 
     Thousand, Hundred, Two, Three, Four, Five, Six, Ten, Twelve, Twenty, Ninety, Percent: Number;
 
+    IntNum : Int -> Number;
+    IntPerc: Number;
+
     Greater, Lesser, SummOf, IsSum, Given, GivenSum, Is: Equals;
     CommAnd, And, Plus, Multiply, Less: Sum;
     Numberof, Valueof : What;
