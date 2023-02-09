@@ -12,7 +12,7 @@ def parseAndValidate(tree):
       sharesValue = getNumber(args[1],eng)
       return [sharesVariable,sharesValue]
     else:
-      print("no")
+      print("no",constructor,args[0])
   elif (constructor=="SumPred"):
     typeEquals,_ = args[0].unpack()
     numOf,_ = args[1].unpack()
@@ -41,9 +41,46 @@ def parseAndValidate(tree):
       return([comment[0],result])
     else:
       print("unknown Comment",isitPred,args[1])
+  elif (constructor=="MultiComment"):
+    ar1,_ = args[0].unpack()
+    ar2,_ = args[1].unpack()
+    res1 = parseAndValidate(args[0])
+    res2 = parseAndValidate(args[1])
+    print(res1,res2)
+
+    connectOp = connectingOp(args[1])
+    print(connectOp)
+
+    if (isinstance(res1[1],int)):
+      return([res1[0],(ops[connectOp])(res1[1],res2)])
+    elif (isinstance(res1[1],str)):
+      return(res1[0],("(" + res1[1] + ")" + wordOps[connectOp] + str(res2)))
+    else:
+      print(res1,res2)
+  elif (constructor=="SumNumPhrase"):
+  #,  and the sum of / two thousand / and five hundred and two hundred
+  #  (SumNumPhrase (CompoundAnd CommAnd SummOf) / (DoubleNum Two Thousand) / And / (DoubleNum Five Hundred) / And / (DoubleNum Two Hundred))
+    print(constructor,args)
+    typeEquals = args[0]
+    firstNum = args[1]
+    firstOp,_ = args[2].unpack()
+    sndNum = args[3]
+    sndOp,_ = args[4].unpack()
+    trdNum = args[5]
+
+    firstSum = ops[firstOp](getNumber(firstNum,eng),getNumber(sndNum,eng))
+    secondSum = ops[sndOp](firstSum,getNumber(trdNum,eng))
+
+    return(secondSum)
   else:
       print("some other thing")
       print(tree)
+
+def connectingOp(tree):
+  cons,args = tree.unpack()
+  c,a = args[0].unpack()
+  op,_ = a[0].unpack()
+  return(op)
 
 def noEquals(phrase):
   cons,args = phrase.unpack()
@@ -51,6 +88,7 @@ def noEquals(phrase):
     sumitem = getNumber(args[0],eng)
     summ,_ = args[1].unpack()
     item = args[2].unpack()
+    print(sumitem,"/", summ,"/",item)
     if (isinstance(sumitem,int)):
       return(addNum(args[0],args[2],args[1],eng))
     elif (isinstance(sumitem,list)):
@@ -59,7 +97,8 @@ def noEquals(phrase):
       sumOf,sumArg = args[0].unpack()
       op,_ = sumArg[0].unpack()
       c,ar = args[2].unpack()
-      num2 = (ifPercent(ar))
+      print("noeq",c,ar)
+      num2 = (ifPercent(c,ar))
       result = withPercent([num1,num2],ops[summ])
       res = price + wordOps[op] + str(result)
       print(res)
@@ -84,15 +123,30 @@ def getPriceClass(ls):
       print("no string")
 
 def checkSumOf(sumof):
+  print("hii",sumof[0],"/",sumof[1],"/",sumof[2])
   ls = []
   for s in sumof[1:]:
     l = getWhich(s,eng)
-    ls.append(l)
-  if (isinstance(ls[0],str)) and "price" in ls[0]:
-    st = (ls[0] + "*" + str(numberShares[(ls[1])]))
-    return(st)
+    ls.append(str(l))
+  (print(ls))
+  if "price" in ls[0]:
+    if (isFloat(ls[1])):
+      print(ls[0],ls[1])
+      st = (ls[0] + "*" + (ls[1]))
+      return(st)
+    else:
+      print(ls[1])
+      st = (ls[0] + "*" + str(numberShares[(ls[1])]))
+      return(st)
   else:
     pass
+
+def isFloat(x):
+  try:
+    float(x)
+    return(True)
+  except ValueError:
+    return(False)
 
 def getWhich(tree,eng):
   constructor,args = tree.unpack()
@@ -107,18 +161,24 @@ def getWhich(tree,eng):
     cons,ars = args[0].unpack()
     if (cons in engNums):
       return(engNums[cons])
-    elif (cons == "DoubleNum"):
-      return(ifPercent(ars))
+    else:
+      return(ifPercent(cons,ars))
+
   else:
     pass
 
-def ifPercent(ars):
-  x,_ = ars[0].unpack()
-  y,_ = ars[1].unpack()
-  if (y == "Percent"):
-    return((engNums[x])/100)
+def ifPercent(c,ars):
+  x,y = ars[1].unpack()
+  if (c == "IntPerc"):
+    # print("hi",x,y)
+    if (x == "IntNum"):
+      perc = y[0].unpack()
+      return(perc/100)
+    else:
+      print(engNums[x])
+      return((engNums[x])/100)
   else:
-    return(doubleNum(ars))
+    return(doubleNum(ars,eng))
 
 
 def getSum(tree,eng):
@@ -157,6 +217,7 @@ def add(tree1,tree2,eng):
     return (sum(vals))
 
 def addNum(tree1,tree2,whichAdd,eng):
+  print("addnum",tree1,tree2)
   ls = ([getWhich(tree1,eng),getWhich(tree2,eng)])
   return(morevagueAddNum(tree2,ls,whichAdd,eng))
 
@@ -179,11 +240,20 @@ def isPercent(tree,ls,op):
   if (isinstance(getWhich(tree,eng),int)):
     return(sum(ls))
   else:
-    isPercent = getName(tree,eng).split()
-    if (len(isPercent) == 2) and (isPercent[-1] == "percent"):
-      return(withPercent(ls,op))
-    else:
-      return(op(ls[0],ls[1]))
+    isPercent = []
+    cons,ars = tree.unpack()
+    intperc,args = ars[0].unpack()
+    for a in args:
+      un,_ = a.unpack()
+      isPercent.append(un)
+    # isPercent = getName(tree,eng).split()
+    if (len(isPercent) == 2) and (isPercent[0] == "Percent"):
+      n = ls[0]
+      perc = (engNums[isPercent[1]] / 100) * n
+      return(op(n,perc))
+      # return(op(ls[0],ls[1]))
+  # else:
+  #   pass
 
 def withPercent(ls,op):
   return(op(ls[0],(ls[1] * ls[0])))
@@ -218,7 +288,7 @@ def getNumber(tree,eng):
     val = engNums[constructor]
     return(val)
   elif constructor == "DoubleNum":
-    return(doubleNum(args))
+    return(doubleNum(args,eng))
   elif constructor == "SumOf":
     sum = getSum(tree,eng)
     return(sum)
@@ -237,11 +307,14 @@ def getNumber(tree,eng):
   else:
     pass
 
-def doubleNum(arg):
-  x,_ = arg[0].unpack()
+def doubleNum(arg,eng):
+  x,n = arg[0].unpack()
   y,_ = arg[1].unpack()
   if (x in engNums) and (y in engNums):
     return(engNums[x] * engNums[y])
+  elif (x == "IntNum") and (y == "IntPerc"):
+    i = int(eng.linearize(arg[0])) * 0.01
+    return(i)
   else:
     print("number error:",x,y)
 

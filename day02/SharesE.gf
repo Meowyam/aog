@@ -2,13 +2,14 @@ concrete SharesE of Shares = open Prelude in {
   lincat
     Comment = SS;
     Item = SS;
-    Number = SS;
+    Number = {s : Str};
     Kind = LinKind;
     Quality = LinQuality;
     Equals = LinEquals;
     Sum = SS;
     What = SS;
     SumItem = SS;
+    Symbol = SS;
   lin
     Pred item num = {
       s = item.s ++ "is" ++ num.s;
@@ -40,14 +41,17 @@ concrete SharesE of Shares = open Prelude in {
     MultiSumOf sum a eq b = {
       s = a.s ++ sum.s ++ eq.s ++ b.s;
     };
-    NoEquals a sum num = {
-      s = a.s ++ sum.s ++ num.s;
+    NoEquals a sum n = {
+      s = a.s ++ sum.s ++ n.s;
     };
     SumOf sum a b = {
       s = a.s ++ sum.s ++ b.s;
     };
     DoubleNum n t = {
       s = n.s ++ t.s ;
+    };
+    MultiComment c1 c2 = {
+      s = c1.s ++ c2.s;
     };
     -- Shares = mkKind "shares";
     Old = mkQuality "original";
@@ -80,7 +84,10 @@ concrete SharesE of Shares = open Prelude in {
     Numberof = {s = "the number of"};
     Valueof = {s = "the value of"};
 
-    Thousand = {s = "1000"};
+    CompoundAnd sum eq = {s = sum.s ++ eq.s};
+    SumNumPhrase eq n1 sum n2 sum2 n3 = {s = eq.s ++ n1.s ++ sum.s ++ n2.s ++ sum2.s ++ n3.s};
+
+    Thousand = {s = "1000" | "thousand"};
     Hundred = {s = "hundred"};
     Two = {s = "two"};
     Three = {s = "three"};
@@ -91,8 +98,8 @@ concrete SharesE of Shares = open Prelude in {
     Twelve = {s = "twelve"};
     Twenty = {s = "twenty"};
     Ninety = {s = "ninety"};
-    Percent = {s = "percent"};
-    IntPerc = {s = "%"};
+    Percent = {s = "percent" | "%"};
+    IntPerc symb num = {s = num.s ++ symb.s};
     IntNum int = {
       s = int.s;
     };

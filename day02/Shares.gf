@@ -7,22 +7,18 @@ abstract Shares = {
     Kind;
     What;
     Quality;
-    Number;
     Equals;
     Sum;
     SumItem;
+    Number;
+    Symbol;
 
   fun
     Pred : Item -> Number -> Comment;
     SumPred : Equals -> Item -> SumItem -> Comment;
-
--- the value of the Class L shares shall be given by the lesser of the conversion price multiplied by the number of Class L shares -> comment
--- and / the purchase price multiplied by the number of new shares
--- sum / (SumOf Multiply (UnnumberedKind (Mod (WithThe (PriceClass "purchase")))) (NumberedKind Numberof (Shares (Mod New))))
--- less twenty percent
--- sum -> Number
-
     DoublePred : Sum -> Comment -> SumItem -> Comment;
+    SumNumPhrase : Equals -> Number -> Sum -> Number -> Sum -> Number -> Comment;
+    MultiComment : Comment -> Comment -> Comment;
 
 
     NumberedKind : What -> Kind -> Item;
@@ -45,13 +41,16 @@ abstract Shares = {
     SumOf : Sum -> Item -> Item -> SumItem;
     Comma : Item -> SumItem -> SumItem;
 
-    Thousand, Hundred, Two, Three, Four, Five, Six, Ten, Twelve, Twenty, Ninety, Percent: Number;
+    Thousand, Hundred, Two, Three, Four, Five, Six, Ten, Twelve, Twenty, Ninety: Number;
+
+    Percent: Symbol;
 
     IntNum : Int -> Number;
-    IntPerc: Number;
+    IntPerc: Symbol -> Number -> Number;
 
     Greater, Lesser, SummOf, IsSum, Given, GivenSum, Is: Equals;
     CommAnd, And, Plus, Multiply, Less: Sum;
+    CompoundAnd: Sum -> Equals -> Equals;
     Numberof, Valueof : What;
 
 }
